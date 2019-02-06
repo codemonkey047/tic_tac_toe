@@ -1,10 +1,12 @@
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Formatting;
 using System.Threading.Tasks;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Host;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace TicTacToePlayer
 {
@@ -20,7 +22,9 @@ namespace TicTacToePlayer
             var requestString = await req.Content.ReadAsStringAsync();
             var boardState = JsonConvert.DeserializeObject<BoardState>(requestString);
             var newState = new PlayerFactory().GetPlayer(playerType).MakePlay(boardState);
-            return req.CreateResponse(newState);
+
+
+            return req.CreateResponse(new PlayerResponse{board = newState});
         }
     }
 }
