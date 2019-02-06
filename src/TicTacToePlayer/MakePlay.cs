@@ -19,7 +19,7 @@ namespace TicTacToePlayer
             var requestString = await req.Content.ReadAsStringAsync();
             var boardState = JsonConvert.DeserializeObject<BoardState>(requestString);
             log.Info(boardState.NextPlayer);
-            for (var i = 0 ; i < boardState.Board.Length; i++)
+            for (var i = boardState.Board.Length-1 ; i >= 0; i--)
                 if (boardState.Board[i] == "-")
                 {
                     boardState.Board[i] = boardState.NextPlayer;
