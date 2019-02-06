@@ -16,16 +16,11 @@ namespace TicTacToePlayer
         {
             log.Info("C# HTTP trigger function processed a request.");
 
+            var playerType = req.RequestUri.ParseQueryString().Get("playerType");
             var requestString = await req.Content.ReadAsStringAsync();
             var boardState = JsonConvert.DeserializeObject<BoardState>(requestString);
-            log.Info(boardState.NextPlayer);
-            for (var i = boardState.Board.Length-1 ; i >= 0; i--)
-                if (boardState.Board[i] == "-")
-                {
-                    boardState.Board[i] = boardState.NextPlayer;
-                    break;
-                }
-            return req.CreateResponse(boardState.Board);
+            var newState = new PlayerFactory().GetPlayer(playerType).MakePlay(boardState);
+            return req.CreateResponse(newState);
         }
     }
 }
